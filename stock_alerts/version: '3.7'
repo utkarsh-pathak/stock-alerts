@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  web.local:
+    build: .
+    restart: always
+    command:
+      - python manage.py runserver
+    ports:
+      - "8008:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: stock_alerts.settings
+    volumes:
+      - .:/home/app/webapp/

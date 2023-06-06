@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  memcached:
+    image: memcached:alpine3.18
+  web.local:
+    build: .
+    restart: always
+    command:
+      - /app/docker/runserver.dev.sh
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: stock_alerts.settings
+    volumes:
+      - .:/app/
+    depends_on:
+      - memcached
+  redis:
+    image: redis:alpine
+  celery:
+    build: .
+    command: celery -A stocks worker -l info --queues=handle_stock_alerts
+    volumes:
+      - .:/app/
+    environment:
+      DJANGO_SETTINGS_MODULE: stock_alerts.settings
+    depends_on:
+      - redis
+  celery-beat:
+    build: .
+    command: celery -A stocks beat -l info
+    volumes:
+      - .:/app/
+    environment:
+      DJANGO_SETTINGS_MODULE: stock_alerts.settings
+    depends_on:
+      - redis
