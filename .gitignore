@@ -1,0 +1,16 @@
+*.pot
+*.pyc
+.eggs
+.coveragerc
+.coverage
+htmlcov
+_build
+__pycache__
+.cache
+scratch.py
+secret.py
+build
+dist
+*egg-info
+.DS_Store
+.idea/
